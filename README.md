@@ -239,7 +239,7 @@ Use these checks before presenting the project:
 
 TrafficPulse AI is an educational and hackathon prototype. It does not replace official traffic updates, professional judgment, or emergency services.
 
-Do not assume an ambulance or police unit has been dispatched unless an authorized system confirms it. In India, call **112** for emergency assistance..
+Do not assume an ambulance or police unit has been dispatched unless an authorized system confirms it. In India, call **112** for emergency assistance.
 
 ---
 
