@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TrafficPulse AI | Traffic Police Dashboard</title>
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #172033;
+    }
+
+    header {
+        background: #172554;
+        color: white;
+        padding: 20px;
+    }
+
+    header h1 {
+        margin: 0 0 10px;
+    }
+
+    header a {
+        color: white;
+        margin-right: 18px;
+    }
+
+    main {
+        padding: 20px;
+        max-width: 1500px;
+        margin: auto;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card,
+    .panel {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px #00000010;
+    }
+
+    .stat-card h3 {
+        margin-top: 0;
+        color: #475569;
+    }
+
+    .stat-number {
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .layout {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-top: 14px;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 11px;
+        margin-top: 6px;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+        font: inherit;
+    }
+
+    textarea {
+        min-height: 85px;
+        resize: vertical;
+    }
+
+    button {
+        padding: 10px 14px;
+        margin-top: 12px;
+        border: none;
+        border-radius: 7px;
+        background: #1d4ed8;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
+
+    .submit-button {
+        width: 100%;
+        background: #b91c1c;
+        padding: 13px;
+    }
+
+    #map {
+        width: 100%;
+        height: 420px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .incident-card {
+        border: 1px solid #dbe3ee;
+        border-left: 5px solid #dc2626;
+        border-radius: 8px;
+        padding: 14px;
+        margin: 12px 0;
+        background: white;
+    }
+
+    .incident-card h3 {
+        margin: 0 0 8px;
+    }
+
+    .incident-card p {
+        overflow-wrap: anywhere;
+    }
+
+    .severity {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .status-label {
+        display: inline-block;
+        padding: 5px 8px;
+        background: #e2e8f0;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    #policeMessage {
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    .muted {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+        .layout {
+            grid-template-columns: 1fr;
+        }
+
+        .stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+</head>
+
+<body>
+    <header>
+        <h1>🚔 TrafficPulse AI</h1>
+        <p>Traffic Police Incident Management Dashboard</p>
+
+
+    <nav>
+        <a href="/">Main Dashboard</a>
+        <a href="/emergency">Ambulance Emergency</a>
+    </nav>
+</header>
+
+<main>
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Incidents</h3>
+            <div class="stat-number" id="totalCount">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Active Incidents</h3>
+            <div class="stat-number" id="activeCount">0</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Resolved Incidents</h3>
+            <div class="stat-number" id="resolvedCount">0</div>
+        </div>
+    </section>
+
+    <div class="layout">
+        <section class="panel">
+            <h2>🚨 Report an Incident</h2>
+
+            <form id="incidentForm">
+                <label for="incidentType">Incident type</label>
+                <select id="incidentType" required>
+                    <option value="Accident">Road Accident</option>
+                    <option value="Traffic Jam">Traffic Jam</option>
+                    <option value="Roadblock">Roadblock</option>
+                    <option value="Vehicle Breakdown">Vehicle Breakdown</option>
+                    <option value="Road Hazard">Road Hazard</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="incidentLocation">Incident location</label>
+                <input
+                    id="incidentLocation"
+                    type="text"
+                    placeholder="Example: MG Road, Bengaluru"
+                    required
+                >
+
+                <label for="severity">Severity</label>
+                <select id="severity" required>
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                </select>
+
+                <label for="description">Description</label>
+                <textarea
+                    id="description"
+                    placeholder="Describe the incident..."
+                    required
+                ></textarea>
+
+                <button
+                    id="reportButton"
+                    class="submit-button"
+                    type="submit"
+                >
+                    Report Incident
+                </button>
+            </form>
+
+            <p id="policeMessage" role="status">
+                Ready to manage traffic incidents.
+            </p>
+
+            <p class="muted">
+                Demo notice: reports are stored in your application's
+                database. They are not automatically sent to real
+                police services.
+            </p>
+        </section>
+
+        <section class="panel">
+            <h2>📍 Incident Map</h2>
+
+            <div id="map"></div>
+
+            <h2>Incident Management</h2>
+
+            <button id="refreshButton" type="button">
+                Refresh Incidents
+            </button>
+
+            <div id="incidentsList">
+                Loading incidents...
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script src="{{ url_for('static', filename='js/police.js') }}"></script>
+
+
+</body>
+</html>

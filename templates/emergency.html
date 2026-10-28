@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrafficPulse AI | Ambulance Emergency</title>
+
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #172033;
+    }
+
+    header {
+        padding: 18px 24px;
+        background: #b91c1c;
+        color: white;
+    }
+
+    header h1 { margin: 0 0 8px; }
+
+    header a {
+        color: white;
+        margin-right: 16px;
+    }
+
+    main {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 18px;
+        padding: 18px;
+    }
+
+    .panel {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px #00000010;
+    }
+
+    label {
+        display: block;
+        margin-top: 16px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin-top: 7px;
+        border: 1px solid #cbd5e1;
+        border-radius: 7px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 16px;
+        border: 0;
+        border-radius: 7px;
+        background: #b91c1c;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
+
+    #map {
+        min-height: 520px;
+        height: 70vh;
+        border-radius: 12px;
+    }
+
+    #message {
+        margin-top: 14px;
+        line-height: 1.5;
+    }
+
+    .route-card {
+        padding: 12px;
+        margin-top: 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+    }
+
+    .route-card.selected {
+        border: 2px solid #16a34a;
+        background: #f0fdf4;
+    }
+
+    .status {
+        color: #b91c1c;
+        font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+        main { grid-template-columns: 1fr; }
+        #map { height: 55vh; }
+    }
+</style>
+```
+
+</head>
+
+<body>
+<header>
+    <h1>🚑 TrafficPulse AI — Emergency Mode</h1>
+    <p>Emergency route planning demonstration</p>
+    <nav>
+        <a href="/">Main Dashboard</a>
+        <a href="/police">Traffic Police</a>
+    </nav>
+</header>
+
+<main>
+    <section class="panel">
+        <h2>Ambulance Navigation</h2>
+        <p class="status">● EMERGENCY MODE</p>
+
+
+    <label for="startLocation">Ambulance current location</label>
+    <input id="startLocation"
+           placeholder="Example: Challakere, Karnataka">
+
+    <label for="destination">Hospital destination</label>
+    <input id="destination"
+           placeholder="Example: Chitradurga, Karnataka">
+
+    <button id="routeBtn" type="button">
+        Find Emergency Routes
+    </button>
+
+    <div id="message" role="status">
+        Enter the ambulance location and hospital destination.
+    </div>
+
+    <h3>Available routes</h3>
+    <div id="routesList"></div>
+</section>
+
+<section class="panel">
+    <div id="map" aria-label="Emergency route map"></div>
+</section>
+
+
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/emergency.js') }}"></script>
+
+</body>
+</html>
