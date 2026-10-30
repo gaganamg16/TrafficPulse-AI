@@ -216,17 +216,7 @@ Use these checks before presenting the project:
 * Add user authentication and secure data management.
 * Test the application with real users and measure its effectiveness.
 
-## 👥 12. Team Details
 
-**Team Name:** Twin Sparks
-**Team ID:** MSC26
-**Project:** TrafficPulse AI
-**Domain:** Smart City
-
-**Team Members:**
-
-* Gagana M G
-* Kala S P
 
 ## 📌 13. Disclaimer
 
