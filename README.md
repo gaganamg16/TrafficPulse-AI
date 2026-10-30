@@ -2,14 +2,7 @@
 
 ### Smart City Traffic Assistance and Emergency Awareness Platform
 
-**Project Name:** TrafficPulse AI
-**Team Name:** Twin Sparks
-**Team ID:** MSC26
-**Domain:** Smart City
-**Team Members:**
 
-* Gagana M G
-* Kala S P
 
 ---
 
